@@ -1,0 +1,22 @@
+import pandas as pd
+import numpy as np
+data=pd.read_csv('enjoysports.csv')
+attribute=np.array(data)[:,:-1]
+target=np.array(data)[:,-1]
+print("Training data :\n")
+print(data)
+def train(X, y):
+    h = None
+
+    for i in range(len(X)):
+        if y[i] == 'yes':
+            if h is None:
+                h = X[i].copy()
+            else:
+                for j in range(len(h)):
+                    if h[j] != X[i][j]:
+                        h[j] = '?'
+
+    return h
+print("\nFinal Hypothesis:")
+print(train(attribute,target))
