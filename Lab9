@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_olivetti_faces
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Load data
+data = fetch_olivetti_faces(shuffle=True, random_state=42)
+X, y = data.data, data.target
+
+# Split
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)
+
+# Train + predict
+model = GaussianNB().fit(Xtrain, ytrain)
+ypred = model.predict(Xtest)
+
+# Results
+print("Accuracy:", accuracy_score(ytest, ypred)*100)
+print(classification_report(ytest, ypred, zero_division=1))
+print(confusion_matrix(ytest, ypred))
+
+# Show images
+fig, ax = plt.subplots(3, 5)
+for a, img, t, p in zip(ax.ravel(), Xtest, ytest, ypred):
+    a.imshow(img.reshape(64,64), cmap='gray')
+    a.set_title(f"T:{t} P:{p}")
+    a.axis('off')
+
+plt.show()
